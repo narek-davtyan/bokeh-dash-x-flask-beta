@@ -5,7 +5,7 @@ ENV NUM_PROCS=4
 ENV BOKEH_RESOURCES=cdn
 RUN apt-get install git bash
 RUN git clone https://github.com/narek-davtyan/bokeh-dash-x-flask-beta.git
-RUN cd bokeh-vis-bd-x
+RUN cd bokeh-dash-x-flask-beta
 RUN conda install --yes --quiet python=${PY_VERSION} numpy packaging pandas bokeh=${BK_VERSION} pillow pyparsing python-dateutil pytz pyyaml six tornado typing-extensions flask "xlrd==1.2.0"
 RUN conda clean -ay
 RUN pip install wordcloud==1.8.0 pandarallel==1.5.1
