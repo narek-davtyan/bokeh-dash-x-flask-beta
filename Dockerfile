@@ -13,7 +13,7 @@ EXPOSE 8080
 EXPOSE 8000
 EXPOSE 5006
 
-CMD exec gunicorn --bind :$PORT bokeh-dash-x-flask-beta/main.py --workers 1 --threads 4 --timeout 60
+CMD exec gunicorn --bind :$PORT bokeh-dash-x-flask-beta/main.py:app --workers 1 --threads 4 --timeout 60
 
 # CMD python main.py
 # CMD bokeh serve bokeh-vis-bd-x/ --port 8080 \
