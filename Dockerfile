@@ -12,7 +12,10 @@ RUN pip install wordcloud==1.8.0 pandarallel==1.5.1
 EXPOSE 8080
 EXPOSE 8000
 EXPOSE 5006
-CMD python main.py
+
+CMD exec gunicorn --bind :$PORT bokeh-dash-x-flask-beta/main.py --workers 1 --threads 4 --timeout 60
+
+# CMD python main.py
 # CMD bokeh serve bokeh-vis-bd-x/ --port 8080 \
 #     --allow-websocket-origin="*" \
 #     --num-procs=${NUM_PROCS}
