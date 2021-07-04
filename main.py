@@ -34,7 +34,7 @@ if __name__ == '__main__':
 app = Flask(__name__)
 
 # Change with project
-PROJECT_FOLDER = 'bokeh-dash-x-flask-beta'
+PROJECT_FOLDER = 'app' # 'bokeh-dash-x-flask-beta'
 
 def bkapp(doc):
 
