@@ -1,16 +1,8 @@
 import pandas as pd
 import numpy as np
 
-# Import multiprocessing libraries
-from pandarallel import pandarallel
-
-# Initialization
-pandarallel.initialize()
-
 # Analytics
 # import timeit
-
-
 
 try:
     import asyncio
@@ -30,22 +22,35 @@ from bokeh.server.server import BaseServer
 from bokeh.server.tornado import BokehTornado
 from bokeh.server.util import bind_sockets
 
+if __name__ == '__main__':
+    print('This script is intended to be run with gunicorn. e.g.')
+    print()
+    print('    gunicorn -w 4 flask_gunicorn_embed:app')
+    print()
+    print('will start the app on four processes')
+    import sys
+    sys.exit()
+
 app = Flask(__name__)
 
+# Change with project
+PROJECT_FOLDER = 'bokeh-dash-x-flask-beta'
 
 def bkapp(doc):
 
-    # Load data locally
-    # df_orig = pd.read_excel(r'result_data_x.xlsx', names=['index', 'type', 'date', 'code', \
-    #     'filter_one', 'filter_two', 'filter_three', 'filter_four', 'recommendation', 'easiness', 'overall', 'question_one', \
-    #     'rec_sc', 'eas_sc', 'sentiment', 'lang', 'question_one_filtered_lemmas'])
-    # Load data on server
-    df_orig = pd.read_excel(r'bokeh-dash-x/result_data_x.xlsx', names=['index', 'type', 'date', 'code', \
+    fname = 'result_data_x.xlsx'
+    import os
+    
+    if not os.path.isfile(fname):
+        fname = PROJECT_FOLDER + '/result_data_x.xlsx'
+
+    # Load data locally or on server
+    df_orig = pd.read_excel(fname, names=['index', 'type', 'date', 'code', \
         'filter_one', 'filter_two', 'filter_three', 'filter_four', 'recommendation', 'easiness', 'overall', 'question_one', \
         'rec_sc', 'eas_sc', 'sentiment', 'lang', 'question_one_filtered_lemmas'])
 
     # Transform filtered lemmas string into list of strings
-    df_orig['question_one_filtered_lemmas'] = df_orig.loc[~df_orig['question_one_filtered_lemmas'].isna()]['question_one_filtered_lemmas'].parallel_apply(lambda x: x[2:-2].split("', '"))
+    df_orig['question_one_filtered_lemmas'] = df_orig.loc[~df_orig['question_one_filtered_lemmas'].isna()]['question_one_filtered_lemmas'].apply(lambda x: x[2:-2].split("', '"))
 
     # Create dictionary of all plots, filter lock, filters
     general_dict = {}
@@ -755,7 +760,7 @@ sockets, port = bind_sockets("localhost", 0)
 
 @app.route('/', methods=['GET'])
 def bkapp_page():
-    script = server_document('http://localhost:5006/bkapp')
+    script = server_document('http://localhost:%d/bkapp' % port)
     return render_template("embed.html", script=script, template="Flask")
 
 
@@ -774,6 +779,6 @@ t = Thread(target=bk_worker)
 t.daemon = True
 t.start()
 
-import os
-if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
+# import os
+# if __name__ == "__main__":
+#     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
