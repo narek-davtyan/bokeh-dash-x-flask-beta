@@ -20,8 +20,8 @@ WORKDIR $APP_HOME
 COPY . ./
 
 # EXPOSE 8080
-EXPOSE 8000
-ENV PORT 8000
+EXPOSE 80
+ENV PORT 80
 
 # CMD exec gunicorn --bind :$PORT --workers 4 --threads 8 --timeout 0 bokeh-dash-x-flask-beta/main:app
 # CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 main:app
