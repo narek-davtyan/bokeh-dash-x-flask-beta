@@ -756,7 +756,7 @@ bkapp = Application(FunctionHandler(bkapp))
 
 # This is so that if this app is run using something like "gunicorn -w 4" then
 # each process will listen on its own port
-sockets, port = bind_sockets("localhost", 80)
+sockets, port = bind_sockets("localhost", 0)
 
 @app.route('/', methods=['GET'])
 def bkapp_page():
