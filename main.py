@@ -4,10 +4,8 @@ import numpy as np
 # Analytics
 # import timeit
 
-try:
-    import asyncio
-except ImportError:
-    raise RuntimeError("This example requries Python3 / asyncio")
+from jinja2 import Environment, FileSystemLoader
+from tornado.web import RequestHandler
 
 from threading import Thread
 
@@ -15,23 +13,17 @@ from flask import Flask, render_template
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
 
-from bokeh.application import Application
-from bokeh.application.handlers import FunctionHandler
+
 from bokeh.embed import server_document
-from bokeh.server.server import BaseServer
-from bokeh.server.tornado import BokehTornado
-from bokeh.server.util import bind_sockets
+from bokeh.server.server import Server
 
-if __name__ == '__main__':
-    print('This script is intended to be run with gunicorn. e.g.')
-    print()
-    print('    gunicorn -w 4 flask_gunicorn_embed:app')
-    print()
-    print('will start the app on four processes')
-    import sys
-    sys.exit()
+env = Environment(loader=FileSystemLoader('templates'))
 
-app = Flask(__name__)
+class IndexHandler(RequestHandler):
+    def get(self):
+        template = env.get_template('embed.html')
+        script = server_document('http://localhost:5006/bkapp')
+        self.write(template.render(script=script, template="Tornado"))
 
 # Change with project
 PROJECT_FOLDER = 'app' # 'bokeh-dash-x-flask-beta'
@@ -751,34 +743,13 @@ def bkapp(doc):
 
 
 
-# can't use shortcuts here, since we are passing to low level BokehTornado
-bkapp = Application(FunctionHandler(bkapp))
+server = Server({'/bkapp': bkapp}, num_procs=1, extra_patterns=[('/', IndexHandler)])
+server.start()
 
-# This is so that if this app is run using something like "gunicorn -w 4" then
-# each process will listen on its own port
-sockets, port = bind_sockets("localhost", 0)
+if __name__ == '__main__':
+    from bokeh.util.browser import view
 
-@app.route('/', methods=['GET'])
-def bkapp_page():
-    script = server_document('http://localhost:%d/bkapp' % port)
-    return render_template("embed.html", script=script, template="Flask")
+    print('Opening Tornado app with embedded Bokeh application on http://localhost:5006/')
 
-
-def bk_worker():
-    asyncio.set_event_loop(asyncio.new_event_loop())
-
-    bokeh_tornado = BokehTornado({'/bkapp': bkapp}, extra_websocket_origins=["localhost:80", "0.0.0.0:80", "127.0.0.1:80", "localhost:8000", "0.0.0.0:8000", "127.0.0.1:8000", "localhost:5000", "0.0.0.0:5000", "127.0.0.1:5000"])
-    bokeh_http = HTTPServer(bokeh_tornado)
-    bokeh_http.add_sockets(sockets)
-
-    server = BaseServer(IOLoop.current(), bokeh_tornado, bokeh_http)
-    server.start()
+    server.io_loop.add_callback(view, "http://localhost:5006/")
     server.io_loop.start()
-
-t = Thread(target=bk_worker)
-t.daemon = True
-t.start()
-
-# import os
-# if __name__ == "__main__":
-#     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))

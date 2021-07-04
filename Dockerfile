@@ -20,12 +20,12 @@ WORKDIR $APP_HOME
 COPY . ./
 
 # EXPOSE 8080
-EXPOSE 5000
-ENV PORT 5000
+EXPOSE 5006
+ENV PORT 5006
 
 # CMD exec gunicorn --bind :$PORT --workers 4 --threads 8 --timeout 0 bokeh-dash-x-flask-beta/main:app
 # CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 main:app
-CMD exec gunicorn --bind :$PORT --workers 1 --threads 1 --timeout 0 main:app
+CMD exec python main.py
 
 # CMD python main.py
 # CMD bokeh serve bokeh-vis-bd-x/ --port 8080 \
