@@ -756,7 +756,7 @@ bkapp = Application(FunctionHandler(bkapp))
 
 # This is so that if this app is run using something like "gunicorn -w 4" then
 # each process will listen on its own port
-sockets, port = bind_sockets("localhost", 0)
+sockets, port = bind_sockets("localhost", 80)
 
 @app.route('/', methods=['GET'])
 def bkapp_page():
@@ -767,7 +767,7 @@ def bkapp_page():
 def bk_worker():
     asyncio.set_event_loop(asyncio.new_event_loop())
 
-    bokeh_tornado = BokehTornado({'/bkapp': bkapp}, extra_websocket_origins=["localhost:8000", "0.0.0.0:8000", "localhost:5000", "0.0.0.0:5000"])
+    bokeh_tornado = BokehTornado({'/bkapp': bkapp}, extra_websocket_origins=["localhost:80", "0.0.0.0:80", "localhost:8000", "0.0.0.0:8000", "localhost:5000", "0.0.0.0:5000"])
     bokeh_http = HTTPServer(bokeh_tornado)
     bokeh_http.add_sockets(sockets)
 
