@@ -20,7 +20,7 @@ df_orig = pd.read_excel(r'result_data_x.xlsx', names=['index', 'type', 'date', '
 #     'rec_sc', 'eas_sc', 'sentiment', 'lang', 'question_one_filtered_lemmas'])
 
 # Transform filtered lemmas string into list of strings
-df_orig['question_one_filtered_lemmas'] = df_orig.loc[~df_orig['question_one_filtered_lemmas'].isna()]['question_one_filtered_lemmas'].parallel_apply(lambda x: x[2:-2].split("', '"))
+df_orig['question_one_filtered_lemmas'] = df_orig.loc[~df_orig['question_one_filtered_lemmas'].isna()]['question_one_filtered_lemmas'].apply(lambda x: x[2:-2].split("', '"))
 
 # Create dictionary of all plots, filter lock, filters
 general_dict = {}
