@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <link rel="shortcut icon" href="/static/favicon/favicon.ico">
+<!--       <link rel="stylesheet" href="/static/style.css">
+ -->      
+      <style>
+        body {
+          display: flex;
+        }
+        div { 
+          position: static;
+        }
+        .bk {
+          position: static;
+          /* max-height: 50%; */
+          height: auto;
+        }
+        .bk-root {
+          position: static;
+        }
+        element.style {
+          position: static !important;
+        }
+        .choices { 
+          position: static !important;
+
+        }
+      </style>
+      <meta charset="utf-8">
+      <!-- {{ bokeh_css }} -->
+      {{ bokeh_js }}
+ 
+      <style>
+        div.scrollable {
+            overflow: scroll;
+        }
+        .bk-root .bk-btn-primary.bk-active {
+            /* color: aquamarine; */
+            background-color:hsl(208, 58%, 39%);
+        }
+        .bk-root .bk-btn-warning.bk-active {
+            /* color: aquamarine; */
+            background-color:#d48310;
+        }
+        /* .bk .bk-btn-group {
+          flex-wrap:wrap;
+          align-content: flex-start;
+          height:auto;
+        } */
+        /* .bk .bk-btn-group-flex {
+          position: relative;
+        } */
+        .bk .upper-flex {
+          /* display: flex !important; */
+          flex-wrap: wrap;
+          /* flex-direction: column !important;
+          align-items:stretch;
+          position: static !important;
+          background-color: green;
+          padding-right: 300; */
+        }
+        .bk .super-flex {
+          /* display: flex !important; */
+          flex-wrap: wrap;
+          height: auto !important;
+          /* flex-direction: column !important; */
+          /* align-items:stretch; */
+          /* position: static !important; */
+          /* background-color: green; */
+          /* top: auto !important; */
+        }
+        /* body {
+            display: flex;
+        }
+        .bk-root {
+          display: flex;
+        }
+        div.bk {
+          display: flex !important;
+          position: static !important;
+        } */
+        div { 
+          position: static;
+        }
+        .bk {
+          position: static;
+        }
+        element.style {
+          position: static !important;
+        }
+        .bk-root .choices__inner .choices__item.solid {
+          background-color: green;
+        }
+      </style>
+    {{ js_resources|indent(4)|safe }}
+    {{ css_resources|indent(4)|safe }}
+    {{ plot_script|indent(8) }}
+      <div class="content">
+      </div>
+    </head>
+    <body>
+      {{ plot_div|indent(8) }}
+      
+    </body>
+</html>
