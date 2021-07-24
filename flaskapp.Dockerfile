@@ -26,8 +26,7 @@ ENV PORT 5006
 # CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 main:app
 
 
-CMD ls -al 
-#python flaskapp/main.py
+CMD python flaskapp/main.py
 # CMD bokeh serve bokeh-vis-bd-x/ --port 8080 \
 #     --allow-websocket-origin="*" \
 #     --num-procs=${NUM_PROCS}
