@@ -1,12 +1,6 @@
 import pandas as pd
 import numpy as np
 
-# Import multiprocessing libraries
-from pandarallel import pandarallel
-
-# Initialization
-pandarallel.initialize()
-
 # Analytics
 # import timeit
 
